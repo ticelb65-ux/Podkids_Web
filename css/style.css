@@ -1108,18 +1108,121 @@ input {
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* ===================== RESPONSIVE ===================== */
+/* ===================== RESPONSIVE : ECRANS ETROITS (mobile portrait) =====================
+   Objectif principal ici : ne JAMAIS laisser les boutons changer d'ordre visuel
+   d'une largeur d'ecran a l'autre. Un retour a la ligne (flex-wrap) les
+   redistribue differemment a chaque taille et donne l'impression que "les
+   boutons ne sont plus a leur place" par rapport a la version bureau. On
+   remplace donc le retour a la ligne par un defilement horizontal a une
+   seule rangee : l'ordre reste identique, il suffit de glisser pour voir
+   les boutons qui debordent. */
 
 @media (max-width: 640px) {
-  .barre-haut { padding: 8px 10px; }
+  .barre-haut {
+    padding: 8px 10px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .champ-nom-podcast { max-width: 140px; font-size: 15px; }
   .bouton-action span:not(.icone) { display: none; }
   .bouton-action { padding: 10px; }
+
+  .barre-outils {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .bouton-outil span:not(.icone):not(.fleche-menu) { display: none; }
   .bouton-outil { padding: 10px; }
+
   .piste-etiquette { width: 48px; }
   .zone-pistes { padding: 10px; }
   .reglage-label { width: 80px; font-size: 12px; }
+}
+
+/* ===================== RESPONSIVE : SAISIE TACTILE =====================
+   Cible les appareils pilotes au doigt plutot qu'a la souris (pointer:
+   coarse couvre tablettes/telephones, y compris en desktop mode si le
+   navigateur le signale). Agrandit les elements les plus petits de
+   l'interface, con"us a l'origine pour une precision de souris. */
+
+@media (pointer: coarse) {
+  .piste-bouton-controle { width: 34px; height: 34px; font-size: 16px; }
+  .clip-bouton-action { width: 30px; height: 30px; font-size: 15px; }
+  .bouton-icone-petit { width: 44px; height: 44px; }
+  .poignee { width: 26px; }
+  .clip-poignee-actions { width: 26px; }
+  .btn-preview-son { width: 30px; height: 30px; }
+
+  /* Curseurs (volume, panoramique, fondus) : la poignee par defaut du
+     navigateur est souvent trop petite pour etre saisie precisement au
+     doigt sur Android -- c'est tres probablement ce qui rendait les
+     "ascenseurs" difficiles a actionner. */
+  .curseur-reglage {
+    height: 28px;
+  }
+  .curseur-reglage::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--bleu);
+    border: 3px solid white;
+    box-shadow: var(--ombre);
+    cursor: pointer;
+  }
+  .curseur-reglage::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--bleu);
+    border: 3px solid white;
+    box-shadow: var(--ombre);
+    cursor: pointer;
+  }
+
+  /* La scrollbar verticale de la colonne des pistes (a gauche) est fine
+     par defaut sur Chrome Android : on l'epaissit un peu au cas ou un
+     eleve essaierait de la saisir directement plutot que de faire
+     glisser le contenu du doigt. */
+  .colonne-gauche-pistes {
+    scrollbar-width: auto;
+  }
+  .colonne-gauche-pistes::-webkit-scrollbar {
+    width: 10px;
+  }
+  .colonne-gauche-pistes::-webkit-scrollbar-thumb {
+    background: var(--bordure);
+    border-radius: 5px;
+  }
+}
+
+/* ===================== RESPONSIVE : MODE PAYSAGE SUR PETIT ECRAN =====================
+   En paysage sur un telephone, la hauteur d'ecran disponible est tres
+   reduite (souvent 350-420px). Les barres fixes (haut, outils, lecture)
+   pouvaient a elles seules approcher voire depasser cette hauteur,
+   ecrasant .zone-editeur (donc les pistes) a une hauteur quasi nulle ou
+   la faisant sortir de l'ecran. On compacte donc fortement ces barres
+   dans ce cas precis. */
+
+@media (max-height: 480px) and (orientation: landscape) {
+  .barre-haut { padding: 4px 8px; flex-wrap: nowrap; overflow-x: auto; }
+  .barre-outils { padding: 4px 8px; flex-wrap: nowrap; overflow-x: auto; }
+  .barre-lecture { padding: 6px 14px; gap: 10px; }
+
+  .logo-icone { display: none; }
+
+  .bouton-rond-grand { width: 44px; height: 44px; font-size: 18px; }
+  .bouton-rond-petit { width: 32px; height: 32px; font-size: 15px; }
+
+  /* On s'assure que la zone des pistes recupere tout l'espace vertical
+     restant et reste utilisable, plutot que d'etre ecrasee a 0. */
+  .zone-editeur,
+  .colonne-gauche-pistes,
+  .colonne-clips-scroll {
+    min-height: 0;
+  }
 }
 
 /* ===================== BOUTON AIDE ===================== */
