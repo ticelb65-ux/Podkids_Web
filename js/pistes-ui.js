@@ -223,11 +223,13 @@ const PistesUI = (() => {
         demarrerNavigationLecture(e);
       });
       colonneScrollDom.addEventListener('touchstart', (e) => {
-        const surRegle      = !!e.target.closest('.regle-temps');
-        const surFondPiste  = (!!e.target.closest('.piste-pose-conteneur') ||
-                               !!e.target.closest('.piste-pose-interieur')) &&
-                              !e.target.closest('.clip-audio');
-        if (!surRegle && !surFondPiste) return;
+        // Au tactile, on ne declenche la navigation-par-toucher QUE sur la
+        // regle temporelle : contrairement a la souris, toucher le fond
+        // d'une piste doit rester un geste de defilement libre (balayage),
+        // pas une action de saut de lecture -- sinon le navigateur ne peut
+        // plus faire defiler la zone des pistes au doigt.
+        const surRegle = !!e.target.closest('.regle-temps');
+        if (!surRegle) return;
         demarrerNavigationLecture(e);
       }, { passive: false });
     }
