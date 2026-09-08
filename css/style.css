@@ -1,0 +1,1451 @@
+/* ===================================================================
+   Mon Podcast - Styles
+   Design pense pour des enfants de cycle 3 (9-11 ans) :
+   - gros elements cliquables (min 44px)
+   - couleurs vives ET icones (jamais la couleur seule comme info)
+   - pas de petits boutons rapproches
+   =================================================================== */
+
+:root {
+  --fond: #FFF8EF;
+  --fond-carte: #FFFFFF;
+  --texte-principal: #2E2A26;
+  --texte-secondaire: #7A736A;
+  --bordure: #E8E1D6;
+
+  --bleu: #4A90D9;
+  --bleu-clair: #E3F0FC;
+  --vert: #4CAF7D;
+  --vert-clair: #E2F5EA;
+  --rouge: #E15B5B;
+  --rouge-clair: #FBE5E5;
+
+  /* couleurs par type de piste */
+  --piste-voix: #E15B5B;
+  --piste-voix-clair: #FBE5E5;
+  --piste-ambiance: #8A6FD8;
+  --piste-ambiance-clair: #EBE6FA;
+  --piste-jingle: #E0A23C;
+  --piste-jingle-clair: #FBF0DA;
+  --piste-bruitage: #3DA5A0;
+  --piste-bruitage-clair: #DFF3F1;
+
+  --rayon: 16px;
+  --rayon-petit: 10px;
+  --ombre: 0 2px 8px rgba(46, 42, 38, 0.08);
+  --ombre-forte: 0 6px 20px rgba(46, 42, 38, 0.15);
+}
+
+* { box-sizing: border-box; }
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  font-family: "Comic Neue", "Segoe UI Rounded", "Nunito", -apple-system, sans-serif;
+  background: var(--fond);
+  color: var(--texte-principal);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input {
+  font-family: inherit;
+}
+
+.ecran {
+  min-height: 100vh;
+}
+
+/* ===================== ACCUEIL ===================== */
+
+#ecran-accueil {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.accueil-contenu {
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+
+.logo-accueil { margin-bottom: 28px; }
+.logo-icone { font-size: 64px; display: block; margin-bottom: 8px; }
+.logo-accueil h1 {
+  font-size: 36px;
+  margin: 0;
+  color: var(--texte-principal);
+}
+.sous-titre {
+  color: var(--texte-secondaire);
+  font-size: 18px;
+  margin: 4px 0 0;
+}
+
+.carte-accueil {
+  background: var(--fond-carte);
+  border-radius: var(--rayon);
+  padding: 24px;
+  box-shadow: var(--ombre);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bouton-grand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: var(--rayon);
+  transition: transform 0.1s ease;
+}
+.bouton-grand:active { transform: scale(0.97); }
+.bouton-grand .icone { font-size: 22px; }
+
+.bouton-principal {
+  background: var(--vert);
+  color: white;
+}
+.bouton-secondaire {
+  background: var(--bleu-clair);
+  color: var(--bleu);
+}
+
+.zone-projets-recents {
+  margin-top: 20px;
+  text-align: left;
+}
+.titre-section {
+  font-size: 14px;
+  color: var(--texte-secondaire);
+  margin: 0 0 8px 4px;
+}
+.liste-projets-recents {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.carte-projet-recent {
+  background: var(--fond-carte);
+  border-radius: var(--rayon-petit);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--ombre);
+}
+.carte-projet-recent-infos { flex: 1; text-align: left; min-width: 0; }
+.carte-projet-recent-nom { font-weight: 700; margin: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.carte-projet-recent-date { font-size: 12px; color: var(--texte-secondaire); margin: 2px 0 0; }
+.carte-projet-recent button {
+  font-size: 13px;
+  padding: 8px 14px;
+  background: var(--bleu-clair);
+  color: var(--bleu);
+  border-radius: var(--rayon-petit);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.carte-projet-recent .bouton-supprimer-recent {
+  background: none;
+  color: var(--texte-secondaire);
+  font-size: 18px;
+  padding: 4px 8px;
+}
+
+.note-bas-page {
+  margin-top: 24px;
+  font-size: 13px;
+  color: var(--texte-secondaire);
+  line-height: 1.5;
+}
+
+/* ===================== EDITEUR : BARRE HAUTE ===================== */
+
+#ecran-editeur {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.barre-haut {
+  background: var(--fond-carte);
+  border-bottom: 1px solid var(--bordure);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.barre-haut-gauche, .barre-haut-droite {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bouton-icone {
+  font-size: 22px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--fond);
+}
+.bouton-icone:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.champ-nom-podcast {
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  padding: 6px 10px;
+  border-radius: var(--rayon-petit);
+  max-width: 280px;
+}
+.champ-nom-podcast:focus {
+  background: var(--fond);
+  outline: 2px solid var(--bleu);
+}
+
+.indicateur-sauvegarde {
+  font-size: 13px;
+  color: var(--vert);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.indicateur-sauvegarde.visible { opacity: 1; }
+
+.bouton-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--rayon-petit);
+  background: var(--bleu-clair);
+  color: var(--bleu);
+  white-space: nowrap;
+}
+.bouton-action.bouton-succes { background: var(--vert-clair); color: var(--vert); }
+.bouton-action.bouton-danger { background: var(--rouge-clair); color: var(--rouge); }
+
+/* ===================== BARRE D'OUTILS ===================== */
+
+.barre-outils {
+  background: var(--fond-carte);
+  border-bottom: 1px solid var(--bordure);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.bouton-outil {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--rayon-petit);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.bouton-outil:active { transform: scale(0.96); }
+
+.bouton-outil-micro { background: var(--rouge-clair); color: var(--rouge); }
+.bouton-outil-import { background: var(--bleu-clair); color: var(--bleu); }
+.bouton-outil-banque {
+  background: var(--piste-jingle-clair);
+  color: #8a6420;
+}
+.fleche-menu { font-size: 11px; }
+
+.menu-banque-conteneur {
+  position: relative;
+}
+
+.menu-banque-deroulant {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: var(--fond-carte);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 12px;
+  box-shadow: var(--ombre-forte);
+  z-index: 50;
+  width: min(520px, 92vw);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.menu-banque-deroulant.transparent-pendant-glissement {
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.banque-sons-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.banque-sons-entete-categorie {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--texte-secondaire);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 10px 4px 4px;
+}
+.banque-sons-entete-categorie:first-child {
+  padding-top: 2px;
+}
+
+.banque-sons-grille {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.banque-sons-separateur {
+  height: 1px;
+  background: var(--bordure);
+  margin: 10px 0;
+}
+
+.bouton-importer-banque {
+  width: 100%;
+  justify-content: center;
+  background: var(--bleu-clair);
+  color: var(--bleu);
+  font-weight: 700;
+}
+
+.bouton-banque-personnel {
+  position: relative;
+}
+.bouton-banque-personnel .bouton-supprimer-son-personnel {
+  margin-left: 4px;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.bouton-banque {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: var(--rayon-petit);
+  background: var(--fond);
+  border: 2px solid transparent;
+}
+.bouton-banque:active { transform: scale(0.96); }
+.bouton-banque.type-jingle { background: var(--piste-jingle-clair); color: #8a6420; }
+.bouton-banque.type-ambiance { background: var(--piste-ambiance-clair); color: #5c4399; }
+.bouton-banque.type-bruitage { background: var(--piste-bruitage-clair); color: #1f6864; }
+
+.zoom-controles {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.bouton-icone-petit {
+  font-size: 14px;
+  width: 38px;
+  height: 38px;
+  background: var(--fond);
+  border-radius: var(--rayon-petit);
+  font-weight: 700;
+}
+
+/* ===================== RÈGLE TEMPORELLE ===================== */
+
+.regle-temps {
+  position: relative;
+  height: 28px;
+  flex-shrink: 0;
+  background: var(--fond-carte);
+  border-bottom: 1px solid var(--bordure);
+  border-radius: var(--rayon-petit);
+  cursor: col-resize;
+  user-select: none;
+  width: 100%;
+}
+
+/* ===================== PLAYHEAD ===================== */
+
+#playhead {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  bottom: 0;
+  background: var(--rouge, #e15b5b);
+  pointer-events: none;
+  z-index: 20;
+  display: none;
+  border-radius: 1px;
+  box-shadow: 0 0 6px rgba(225, 91, 91, 0.45);
+}
+
+#playhead::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -5px;
+  width: 12px;
+  height: 12px;
+  background: var(--rouge, #e15b5b);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+}
+
+/* ===================== PISTES ===================== */
+
+/* Conteneur global : deux colonnes côte à côte */
+.zone-editeur {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Colonne gauche : étiquettes + contrôles, largeur fixe, scroll vertical */
+.colonne-gauche-pistes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* padding-top = règle (28px) + gap (6px) + padding-top colonne (10px) */
+  padding: 10px 6px 10px 10px;
+  padding-top: calc(10px + 28px + 6px); /* aligner avec règle dans wrapper */
+  overflow-y: scroll; /* scroll synchronisé par JS avec la colonne droite */
+  overflow-x: hidden;
+  flex-shrink: 0;
+}
+/* Masquer la scrollbar sur la colonne DROITE pour n'en garder qu'une seule
+   visible à gauche, plus accessible */
+/* Colonne droite : règle + rangées de clips, scroll horizontal UNIQUE */
+.colonne-clips-scroll {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: scroll;
+  padding: 10px 10px 10px 0;
+  min-width: 0;
+  /* Masquer uniquement la scrollbar VERTICALE (gérée par la colonne gauche) */
+  scrollbar-width: thin; /* Firefox : fine scrollbar horizontale visible */
+}
+/* Chrome/Safari : masquer la scrollbar verticale uniquement */
+.colonne-clips-scroll::-webkit-scrollbar:vertical { display: none; }
+/* Le wrapper interne gère la disposition des rangées */
+.wrapper-clips-interne {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Rangée de clips d'une piste (dans colonne droite) */
+.piste-clips-rangee {
+  flex-shrink: 0;
+  height: 88px;
+  background: var(--fond-carte);
+  border-radius: var(--rayon);
+  border: 1px solid var(--bordure);
+  overflow: hidden;
+}
+/* Accent couleur à gauche selon le type */
+.piste-clips-rangee.type-voix     { border-left: 3px solid var(--piste-voix); }
+.piste-clips-rangee.type-ambiance { border-left: 3px solid var(--piste-ambiance); }
+.piste-clips-rangee.type-jingle   { border-left: 3px solid var(--piste-jingle); }
+.piste-clips-rangee.type-bruitage { border-left: 3px solid var(--piste-bruitage); }
+
+/* Étiquette + contrôles d'une piste (dans colonne gauche) */
+.piste-gauche {
+  background: var(--fond-carte);
+  border-radius: var(--rayon);
+  border: 1px solid var(--bordure);
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  height: 88px;
+}
+.piste-gauche.type-voix    { border-left: 3px solid var(--piste-voix); }
+.piste-gauche.type-ambiance { border-left: 3px solid var(--piste-ambiance); }
+.piste-gauche.type-jingle  { border-left: 3px solid var(--piste-jingle); }
+.piste-gauche.type-bruitage { border-left: 3px solid var(--piste-bruitage); }
+
+/* Compat : ancien sélecteur .piste utilisé dans quelques endroits */
+.piste {
+  background: var(--fond-carte);
+  border-radius: var(--rayon);
+  border: 1px solid var(--bordure);
+  padding: 10px;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  min-height: 76px;
+  transition: box-shadow 0.1s ease, border-color 0.1s ease;
+}
+.piste.piste-cible-glissement,
+.piste-clips-rangee.piste-cible-glissement {
+  border-color: var(--bleu);
+  box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.25);
+}
+
+.piste-etiquette {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 64px;
+  flex-shrink: 0;
+}
+
+.piste-etiquette-rond {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+.piste-etiquette-rond:active { transform: scale(0.92); }
+.piste-etiquette-texte {
+  font-size: 11px;
+  color: var(--texte-secondaire);
+  font-weight: 600;
+}
+
+.piste.type-voix .piste-etiquette-rond { background: var(--piste-voix-clair); }
+.piste.type-ambiance .piste-etiquette-rond { background: var(--piste-ambiance-clair); }
+.piste.type-jingle .piste-etiquette-rond { background: var(--piste-jingle-clair); }
+.piste.type-bruitage .piste-etiquette-rond { background: var(--piste-bruitage-clair); }
+
+.menu-type-piste {
+  position: fixed;
+  z-index: 500;
+  background: var(--fond-carte);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-petit);
+  box-shadow: var(--ombre-forte);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 140px;
+}
+.option-type-piste {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 7px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.option-type-piste:hover, .option-type-piste:active {
+  background: var(--fond);
+}
+
+.bouton-muet-piste.actif {
+  background: var(--rouge-clair);
+  color: var(--rouge);
+}
+
+.piste-pose-conteneur {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--fond);
+  overflow: hidden;
+}
+.piste-pose-conteneur.survol-drag {
+  outline: 3px dashed var(--bleu);
+  outline-offset: -3px;
+}
+.piste-pose-interieur {
+  position: relative;
+  height: 56px;
+  min-width: 100%;
+}
+
+.repere-aimant {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--vert);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.clip-audio {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: var(--rayon-petit);
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  gap: 4px;
+  cursor: grab;
+  min-width: 56px;
+  overflow: hidden;
+  user-select: none;
+  transition: box-shadow 0.15s ease;
+}
+.clip-audio:active { cursor: grabbing; }
+.clip-audio.en-deplacement { opacity: 0.8; z-index: 10; box-shadow: var(--ombre-forte); }
+.clip-audio.clip-nouveau {
+  animation: clip-apparition 0.6s ease;
+}
+@keyframes clip-apparition {
+  0% { box-shadow: 0 0 0 4px rgba(76, 175, 125, 0.6); }
+  100% { box-shadow: none; }
+}
+
+.piste.type-voix .clip-audio { background: var(--piste-voix-clair); border: 2px solid var(--piste-voix); }
+.piste.type-ambiance .clip-audio { background: var(--piste-ambiance-clair); border: 2px solid var(--piste-ambiance); }
+.piste.type-jingle .clip-audio { background: var(--piste-jingle-clair); border: 2px solid var(--piste-jingle); }
+.piste.type-bruitage .clip-audio { background: var(--piste-bruitage-clair); border: 2px solid var(--piste-bruitage); }
+
+/* forme d'onde en arriere-plan, plein cadre, toujours visible meme sur un clip tres court */
+.clip-mini-onde {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* le nom reste TOUJOURS visible, par-dessus la forme d'onde, quelle que soit la largeur */
+.clip-nom-conteneur {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0 4px;
+}
+
+.clip-poignee-actions {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  width: 18px;
+  height: 100%;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(0,0,0,0.45);
+  background: rgba(255,255,255,0.5);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.clip-poignee-actions:active { transform: scale(0.9); }
+
+.clip-nom {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  cursor: text;
+}
+.clip-nom-edition {
+  width: 100%;
+  font-size: 11px;
+  font-weight: 700;
+  border: none;
+  background: rgba(255,255,255,0.9);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+/* les boutons d'action sont masques par defaut (pour ne pas polluer un clip
+   court) et n'apparaissent qu'au clic sur le clip (.actions-visibles),
+   en overlay par-dessus le nom -- ils ne poussent jamais le contenu */
+.clip-boutons-action {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 180px;
+  z-index: 3;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--rayon-petit);
+  box-shadow: var(--ombre-forte);
+}
+.clip-audio.actions-visibles {
+  overflow: visible;
+  z-index: 20;
+}
+.clip-audio.actions-visibles .clip-boutons-action {
+  display: flex;
+}
+
+.clip-bouton-action {
+  font-size: 13px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.clip-bouton-action:active { transform: scale(0.9); }
+
+.piste-controles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 2px;
+  flex-shrink: 0;
+  align-content: center;
+  padding: 2px;
+}
+.piste-bouton-controle {
+  font-size: 14px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: var(--fond);
+  flex-shrink: 0;
+}
+.piste-bouton-controle:active { transform: scale(0.92); }
+.bouton-supprimer-piste {
+  grid-column: 1 / -1;
+  font-size: 13px;
+}
+.bouton-monter-piste,
+.bouton-descendre-piste {
+  font-size: 11px;
+  border-radius: 4px;
+  color: var(--texte-secondaire);
+}
+.bouton-monter-piste:hover,
+.bouton-descendre-piste:hover {
+  background: var(--bordure);
+  color: var(--texte-principal);
+}
+
+.bouton-ajouter-piste {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 16px 12px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px dashed var(--bordure);
+  border-radius: var(--rayon);
+  color: var(--texte-secondaire);
+}
+
+/* ===================== BARRE DE LECTURE ===================== */
+
+.barre-lecture {
+  background: var(--fond-carte);
+  border-top: 1px solid var(--bordure);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.bouton-rond {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.bouton-rond:active { transform: scale(0.93); }
+.bouton-rond-petit {
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  background: var(--fond);
+}
+.bouton-rond-grand {
+  width: 56px;
+  height: 56px;
+  font-size: 24px;
+  background: var(--bleu-clair);
+  color: var(--bleu);
+}
+.bouton-rond-danger {
+  background: var(--rouge-clair);
+  color: var(--rouge);
+}
+/* Bouton Stop (retour à la position de départ) */
+#btn-stopper {
+  font-size: 16px;
+  background: var(--fond);
+  color: var(--texte-secondaire);
+}
+/* Boutons reculer / avancer */
+#btn-reculer, #btn-avancer {
+  font-size: 14px;
+  background: var(--fond);
+  color: var(--texte-secondaire);
+}
+
+.barre-progression-conteneur {
+  flex: 1;
+}
+.barre-progression-conteneur {
+  flex: 1;
+  /* zone cliquable plus genereuse que la barre visuelle, pour faciliter le geste */
+  padding: 14px 0;
+  cursor: pointer;
+}
+.barre-progression {
+  position: relative;
+  height: 10px;
+  background: var(--fond);
+  border-radius: 5px;
+}
+.barre-progression-remplissage {
+  position: absolute;
+  left: 0; top: 0; height: 10px;
+  width: 0%;
+  background: var(--bleu);
+  border-radius: 5px;
+}
+.barre-progression-curseur {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  width: 18px;
+  height: 18px;
+  background: var(--bleu);
+  border: 3px solid white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: var(--ombre);
+}
+
+.temps-affiche {
+  font-size: 13px;
+  color: var(--texte-secondaire);
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* ===================== MODALES ===================== */
+
+.modale {
+  position: fixed;
+  inset: 0;
+  background: rgba(46, 42, 38, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+.modale[hidden] {
+  display: none;
+}
+
+.modale-contenu {
+  background: var(--fond-carte);
+  border-radius: var(--rayon);
+  padding: 28px;
+  max-width: 520px;
+  width: 100%;
+  position: relative;
+  box-shadow: var(--ombre-forte);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modale-contenu h2 {
+  margin: 0 0 16px;
+  font-size: 22px;
+}
+
+.modale-fermer {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--fond);
+}
+
+/* enregistrement */
+.zone-enregistrement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.visualiseur-micro {
+  width: 100%;
+  height: 80px;
+  background: var(--fond);
+  border-radius: var(--rayon-petit);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 16px;
+}
+.barre-visu {
+  width: 6px;
+  background: var(--rouge);
+  border-radius: 3px;
+  min-height: 4px;
+  transition: height 0.05s ease;
+}
+.chrono-enregistrement {
+  font-size: 28px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.statut-enregistrement {
+  color: var(--texte-secondaire);
+  font-size: 14px;
+  text-align: center;
+  margin: 0;
+}
+
+/* decoupage */
+.aide-decoupage {
+  font-size: 14px;
+  color: var(--texte-secondaire);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+.editeur-forme-onde-conteneur {
+  position: relative;
+  height: 140px;
+  background: var(--fond);
+  border-radius: var(--rayon-petit);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.canvas-forme-onde {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.poignee {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 18px;
+  cursor: ew-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.poignee::before {
+  content: '';
+  width: 6px;
+  height: 100%;
+  border-radius: 3px;
+}
+.poignee-debut { left: 0; }
+.poignee-debut::before { background: var(--vert); }
+.poignee-fin { right: 0; }
+.poignee-fin::before { background: var(--rouge); }
+.curseur-lecture-decoupage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--texte-principal);
+  left: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+.voile-coupe-gauche, .voile-coupe-droite {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.voile-coupe-gauche {
+  background: rgba(76, 175, 125, 0.15);
+  border-right: 2px dashed #E0A23C;
+}
+.voile-coupe-droite {
+  background: rgba(74, 144, 217, 0.12);
+}
+.boutons-decoupage {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+#btn-couper-ici.coupe-active {
+  background: var(--piste-jingle-clair);
+  color: #8a6420;
+  font-weight: 700;
+}
+.boutons-decoupage-bas {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.bouton-secondaire-texte {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--texte-secondaire);
+  border-radius: var(--rayon-petit);
+}
+
+/* confirmation */
+.modale-confirmation-contenu { max-width: 380px; text-align: center; }
+#texte-confirmation { font-size: 16px; margin: 0 0 20px; }
+.boutons-confirmation { display: flex; justify-content: center; gap: 10px; }
+
+/* reglages volume / panoramique */
+.modale-reglages-contenu { max-width: 420px; }
+.reglage-ligne {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.reglage-label {
+  font-size: 14px;
+  font-weight: 700;
+  width: 110px;
+  flex-shrink: 0;
+}
+.curseur-reglage {
+  flex: 1;
+  height: 8px;
+  accent-color: var(--bleu);
+}
+.reglage-valeur {
+  font-size: 13px;
+  font-weight: 700;
+  width: 60px;
+  text-align: right;
+  flex-shrink: 0;
+  color: var(--texte-secondaire);
+}
+
+/* ===================== TOAST ===================== */
+
+.toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--texte-principal);
+  color: white;
+  padding: 12px 22px;
+  border-radius: var(--rayon-petit);
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 200;
+  box-shadow: var(--ombre-forte);
+  animation: toast-apparition 0.2s ease;
+}
+@keyframes toast-apparition {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+@media (max-width: 640px) {
+  .barre-haut { padding: 8px 10px; }
+  .champ-nom-podcast { max-width: 140px; font-size: 15px; }
+  .bouton-action span:not(.icone) { display: none; }
+  .bouton-action { padding: 10px; }
+  .bouton-outil span:not(.icone):not(.fleche-menu) { display: none; }
+  .bouton-outil { padding: 10px; }
+  .piste-etiquette { width: 48px; }
+  .zone-pistes { padding: 10px; }
+  .reglage-label { width: 80px; font-size: 12px; }
+}
+
+/* ===================== BOUTON AIDE ===================== */
+
+.bouton-aide {
+  font-size: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bleu-clair);
+  color: var(--bleu);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.bouton-aide:hover { background: var(--bleu); color: white; }
+
+/* ===================== PANNEAU D'AIDE LATÉRAL ===================== */
+
+.panneau-aide {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(360px, 92vw);
+  height: 100vh;
+  background: var(--fond-carte);
+  border-left: 1px solid var(--bordure);
+  box-shadow: -4px 0 24px rgba(0,0,0,.12);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.panneau-aide[hidden] { display: none; }
+
+.panneau-aide-entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--bleu);
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.bouton-fermer-panneau {
+  background: rgba(255,255,255,.2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bouton-fermer-panneau:hover { background: rgba(255,255,255,.4); }
+
+.panneau-aide-corps {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.aide-section {
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-petit);
+  overflow: hidden;
+}
+.aide-section-titre {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--fond);
+  user-select: none;
+  gap: 8px;
+}
+.aide-section-titre:hover { background: var(--bleu-clair); }
+.aide-chevron { font-size: 11px; color: var(--texte-secondaire); transition: transform .2s; }
+.aide-section-titre.ouvert .aide-chevron { transform: rotate(90deg); }
+
+.aide-section-contenu {
+  padding: 10px 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--texte-principal);
+  border-top: 1px solid var(--bordure);
+  background: var(--fond-carte);
+}
+.aide-section-contenu[hidden] { display: none; }
+.aide-section-contenu p { margin: 0 0 8px; }
+.aide-section-contenu p:last-child { margin-bottom: 0; }
+.aide-section-contenu code {
+  background: var(--fond);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-family: monospace;
+}
+.aide-astuce {
+  background: var(--bleu-clair);
+  color: var(--bleu);
+  border-radius: 6px;
+  padding: 6px 10px !important;
+  font-size: 11px !important;
+}
+
+/* ===================== TOOLTIPS ENRICHIS ===================== */
+
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  /* Par défaut : vers le bas (pour les boutons en haut de l'interface) */
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--texte-principal);
+  color: var(--fond-carte);
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  max-width: 220px;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .15s;
+  z-index: 300;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+[data-tooltip]:hover::after { opacity: 1; }
+/* Pour les boutons dans la zone pistes, afficher vers le haut */
+.piste-bouton-controle[data-tooltip]::after,
+.piste-etiquette-rond[data-tooltip]::after {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+/* ===================== MAGNÉTISME CURSEUR ===================== */
+
+.repere-aimant-curseur {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  bottom: 0;
+  background: var(--vert, #2e7d52);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 19;
+  display: none;
+}
+
+/* ===================== BOUTONS BANQUE DE SONS ===================== */
+
+.bouton-banque {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--rayon-petit);
+  background: var(--fond);
+  border: 2px solid transparent;
+  cursor: grab;
+}
+.bouton-banque:active { transform: scale(0.96); }
+.bouton-banque .icone-son { flex-shrink: 0; }
+.bouton-banque .nom-son   { flex: 1; text-align: left; }
+
+.btn-preview-son {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 11px;
+  background: rgba(0,0,0,.08);
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0,0,0,.12);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+.btn-preview-son:hover { background: rgba(0,0,0,.18); }
+
+/* ===================== MENU CHOIX DE PISTE ===================== */
+
+.menu-choix-piste {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--fond-carte);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  box-shadow: var(--ombre-forte);
+  padding: 12px;
+  z-index: 500;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.menu-choix-piste-titre {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--texte-secondaire);
+  padding: 4px 8px 8px;
+  border-bottom: 1px solid var(--bordure);
+  margin-bottom: 2px;
+}
+
+.menu-choix-piste-option {
+  width: 100%;
+  text-align: left;
+  padding: 9px 12px;
+  border-radius: var(--rayon-petit);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--fond);
+  color: var(--texte-principal);
+}
+.menu-choix-piste-option:hover { background: var(--bleu-clair); color: var(--bleu); }
+.menu-choix-piste-nouveau { color: var(--vert, #2e7d52); }
+.menu-choix-piste-annuler { color: var(--texte-secondaire); font-weight: 400; }
+
+/* ===================== POSITION TEMPORELLE DECOUPAGE ===================== */
+
+.position-decoupage-conteneur {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+  padding: 8px 12px;
+  background: var(--fond);
+  border-radius: var(--rayon-petit);
+  font-size: 13px;
+}
+.position-decoupage-label {
+  color: var(--texte-secondaire);
+  font-weight: 600;
+}
+.position-decoupage-valeur {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--bleu);
+}
+
+/* ===================== BOUTON COUPE MULTI-PISTES ===================== */
+
+.bouton-outil-coupe-multi {
+  background: var(--rouge-clair, #fde2e2);
+  color: var(--rouge, #b53a3a);
+}
+.bouton-outil-coupe-multi:hover {
+  background: var(--rouge, #b53a3a);
+  color: white;
+}
+
+/* ===================== MODALE COUPE MULTI-PISTES ===================== */
+
+.modale-coupe-multi-contenu {
+  max-width: 520px;
+}
+
+#position-coupe-multi-valeur {
+  font-family: 'Courier New', monospace;
+  color: var(--bleu);
+  font-size: 15px;
+}
+
+.liste-pistes-a-couper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 14px 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.option-piste-a-couper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--fond);
+  border-radius: var(--rayon-petit);
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+.option-piste-a-couper:hover { border-color: var(--bordure); }
+.option-piste-a-couper.selectionnee {
+  border-color: var(--bleu);
+  background: var(--bleu-clair);
+}
+.option-piste-a-couper input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.option-piste-a-couper .icone-piste { font-size: 18px; flex-shrink: 0; }
+.option-piste-a-couper .label-piste { font-weight: 600; flex: 1; }
+.option-piste-a-couper .info-piste {
+  font-size: 11px;
+  color: var(--texte-secondaire);
+}
+.option-piste-a-couper.indisponible {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

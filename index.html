@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Podkids - Studio audio pour l'école</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===================== ECRAN ACCUEIL ===================== -->
+<div id="ecran-accueil" class="ecran">
+  <div class="accueil-contenu">
+    <div class="logo-accueil">
+      <span class="logo-icone">🎙️</span>
+      <h1>Podkids</h1>
+      <p class="sous-titre">Crée ton émission de radio !</p>
+    </div>
+
+    <div class="carte-accueil">
+      <button id="btn-nouveau-projet" class="bouton-grand bouton-principal">
+        <span class="icone">✨</span>
+        Commencer un nouveau podcast
+      </button>
+
+      <button id="btn-importer-projet" class="bouton-grand bouton-secondaire">
+        <span class="icone">📂</span>
+        Reprendre un podcast (fichier)
+      </button>
+      <input type="file" id="input-import-fichier" accept=".podcast,.json" hidden>
+    </div>
+
+    <div id="zone-projets-recents" class="zone-projets-recents" hidden>
+      <p class="titre-section">Podcasts en cours sur cet ordinateur</p>
+      <div id="liste-projets-recents" class="liste-projets-recents"></div>
+    </div>
+
+    <p class="note-bas-page">
+      💡 Pense à <strong>sauvegarder ton fichier .podcast</strong> régulièrement si tu changes d'ordinateur entre deux séances !
+    </p>
+  </div>
+</div>
+
+<!-- ===================== ECRAN EDITEUR ===================== -->
+<div id="ecran-editeur" class="ecran" hidden>
+
+  <header class="barre-haut">
+    <div class="barre-haut-gauche">
+      <button id="btn-accueil" class="bouton-icone" title="Retour à l'accueil">🏠</button>
+      <button id="btn-annuler" class="bouton-icone" title="Annuler (Ctrl+Z)" disabled>↩️</button>
+      <button id="btn-refaire" class="bouton-icone" title="Rétablir (Ctrl+Y)" disabled>↪️</button>
+      <input type="text" id="nom-podcast" class="champ-nom-podcast" value="Podcast sans titre" maxlength="60">
+    </div>
+    <div class="barre-haut-droite">
+      <span id="indicateur-sauvegarde" class="indicateur-sauvegarde">💾 Sauvegardé</span>
+      <button id="btn-sauvegarder" class="bouton-action" title="Télécharger le fichier projet">
+        <span class="icone">💾</span> Sauvegarder
+      </button>
+      <button id="btn-exporter" class="bouton-action bouton-succes" title="Télécharger le podcast en mp3">
+        <span class="icone">⬇️</span> Exporter en mp3
+      </button>
+      <button id="btn-aide" class="bouton-icone bouton-aide" title="Aide et documentation">❓</button>
+    </div>
+  </header>
+
+  <!-- Barre d'outils : actions toujours visibles -->
+  <section class="barre-outils" id="barre-outils">
+    <button id="btn-enregistrer-rapide" class="bouton-outil bouton-outil-micro">
+      <span class="icone">🎤</span> Enregistrer ma voix
+    </button>
+    <button id="btn-ajouter-son" class="bouton-outil bouton-outil-import">
+      <span class="icone">📂</span> Importer un son
+    </button>
+    <input type="file" id="input-import-son" accept="audio/*" multiple hidden>
+
+    <div class="menu-banque-conteneur">
+      <button id="btn-ouvrir-banque" class="bouton-outil bouton-outil-banque">
+        <span class="icone">🎵</span> Bibliothèque de sons <span class="fleche-menu">▾</span>
+      </button>
+      <div class="menu-banque-deroulant" id="menu-banque-deroulant" hidden>
+        <div class="banque-sons-liste" id="banque-sons-liste">
+          <!-- rempli par JS -->
+        </div>
+        <div class="banque-sons-separateur"></div>
+        <button id="btn-importer-dans-banque" class="bouton-banque bouton-importer-banque">
+          <span class="icone">➕</span> Ajouter un son à la bibliothèque
+        </button>
+        <input type="file" id="input-importer-dans-banque" accept="audio/*" multiple hidden>
+      </div>
+    </div>
+
+    <div class="zoom-controles">
+      <button id="btn-zoom-moins" class="bouton-icone bouton-icone-petit" title="Zoom -">🔍−</button>
+      <button id="btn-zoom-plus" class="bouton-icone bouton-icone-petit" title="Zoom +">🔍+</button>
+    </div>
+
+    <button id="btn-couper-toutes-pistes" class="bouton-outil bouton-outil-coupe-multi">
+      <span class="icone">✂️</span> Couper toutes les pistes ici
+    </button>
+  </section>
+
+  <!-- Zone d'édition : colonne gauche fixe + colonne droite scrollable -->
+  <div class="zone-editeur">
+
+    <!-- Colonne gauche : étiquettes + contrôles (fixe) -->
+    <div class="colonne-gauche-pistes" id="zone-pistes">
+      <!-- étiquettes générées par JS -->
+    </div>
+
+    <!-- Colonne droite : règle + clips (scroll horizontal unique) -->
+    <div class="colonne-clips-scroll" id="colonne-clips-scroll">
+      <div class="regle-temps" id="regle-temps"></div>
+      <!-- rangées de clips générées par JS -->
+    </div>
+
+  </div>
+
+  <button id="btn-ajouter-piste" class="bouton-ajouter-piste" hidden>
+    <span class="icone">➕</span> Ajouter une piste
+  </button>
+
+  <!-- Barre de lecture -->
+  <footer class="barre-lecture">
+    <button id="btn-stop" class="bouton-rond bouton-rond-petit" title="Retour au début (⏮)">⏮️</button>
+    <button id="btn-reculer" class="bouton-rond bouton-rond-petit" title="Reculer (←)">◀</button>
+    <button id="btn-jouer-tout" class="bouton-rond bouton-rond-grand" title="Lecture / Pause (Espace)">▶️</button>
+    <button id="btn-avancer" class="bouton-rond bouton-rond-petit" title="Avancer (→)">▶</button>
+    <button id="btn-stopper" class="bouton-rond bouton-rond-petit" title="Stop — revenir à la position de départ">⏹️</button>
+    <div class="barre-progression-conteneur">
+      <div class="barre-progression" id="barre-progression">
+        <div class="barre-progression-remplissage" id="barre-progression-remplissage"></div>
+        <div class="barre-progression-curseur" id="barre-progression-curseur"></div>
+      </div>
+    </div>
+    <span class="temps-affiche" id="temps-affiche">0:00 / 0:00</span>
+  </footer>
+
+</div>
+
+<!-- ===================== MODALE ENREGISTREMENT ===================== -->
+<div id="modale-enregistrement" class="modale" hidden>
+  <div class="modale-contenu modale-enregistrement-contenu">
+    <button class="modale-fermer" id="btn-fermer-enregistrement">✖️</button>
+    <h2>🎤 Enregistrer ma voix</h2>
+    <div class="zone-enregistrement">
+      <select id="select-micro" class="curseur-reglage" style="margin-bottom: 10px; width: 100%;">
+        <option value="">Micro par défaut</option>
+      </select>
+      <div id="visualiseur-micro" class="visualiseur-micro"></div>
+      <div class="chrono-enregistrement" id="chrono-enregistrement">0:00</div>
+      <button id="btn-demarrer-enreg" class="bouton-rond bouton-rond-grand bouton-rond-danger">⏺️</button>
+      <p id="statut-enregistrement" class="statut-enregistrement">Clique pour commencer à parler</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODALE DECOUPAGE ===================== -->
+<div id="modale-decoupage" class="modale" hidden>
+  <div class="modale-contenu modale-decoupage-contenu">
+    <button class="modale-fermer" id="btn-fermer-decoupage">✖️</button>
+    <h2>✂️ Découper le son</h2>
+    <p class="aide-decoupage">Clique sur le son pour placer le curseur, puis écoute à partir de cet endroit. Quand tu as trouvé le bon moment, clique sur "Marquer la coupure ici". Tu peux aussi faire glisser les poignées vertes et rouges pour enlever le début ou la fin.</p>
+    <div class="editeur-forme-onde-conteneur">
+      <canvas id="canvas-forme-onde" class="canvas-forme-onde"></canvas>
+      <div class="poignee poignee-debut" id="poignee-debut" title="Glisse pour enlever le début"></div>
+      <div class="poignee poignee-fin" id="poignee-fin" title="Glisse pour enlever la fin"></div>
+      <div class="curseur-lecture-decoupage" id="curseur-lecture-decoupage"></div>
+    </div>
+    <div class="position-decoupage-conteneur">
+      <span class="position-decoupage-label">Position dans le podcast :</span>
+      <span class="position-decoupage-valeur" id="position-decoupage-valeur">0:00.000</span>
+    </div>
+    <div class="boutons-decoupage">
+      <button id="btn-jouer-decoupage" class="bouton-action">▶️ Écouter</button>
+      <button id="btn-stopper-decoupage" class="bouton-action" disabled>⏹️ Stop</button>
+      <button id="btn-couper-ici" class="bouton-action">📍 Marquer la coupure ici</button>
+    </div>
+    <div class="boutons-decoupage-bas">
+      <button id="btn-annuler-decoupage" class="bouton-secondaire-texte">Annuler</button>
+      <button id="btn-valider-decoupage" class="bouton-action bouton-succes">✅ Valider</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODALE COUPE MULTI-PISTES ===================== -->
+<div id="modale-coupe-multi" class="modale" hidden>
+  <div class="modale-contenu modale-coupe-multi-contenu">
+    <button class="modale-fermer" id="btn-fermer-coupe-multi">✖️</button>
+    <h2>✂️ Couper toutes les pistes ici</h2>
+    <p class="aide-decoupage">
+      Coupe synchronisée à la position actuelle du curseur de lecture :
+      <strong id="position-coupe-multi-valeur">0:00.000</strong>
+    </p>
+    <p class="aide-decoupage">Coche les pistes à couper à cet instant précis :</p>
+    <div class="liste-pistes-a-couper" id="liste-pistes-a-couper">
+      <!-- rempli par JS -->
+    </div>
+    <div class="boutons-decoupage-bas">
+      <button id="btn-annuler-coupe-multi" class="bouton-secondaire-texte">Annuler</button>
+      <button id="btn-valider-coupe-multi" class="bouton-action bouton-succes">✅ Couper les pistes sélectionnées</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODALE REGLAGES (volume / panoramique) ===================== -->
+<div id="modale-reglages" class="modale" hidden>
+  <div class="modale-contenu modale-reglages-contenu">
+    <button class="modale-fermer" id="btn-fermer-reglages">✖️</button>
+    <h2 id="titre-reglages">🎚️ Réglages</h2>
+
+    <div class="reglage-ligne">
+      <span class="reglage-label">🔊 Volume</span>
+      <input type="range" id="curseur-volume" min="0" max="150" value="100" class="curseur-reglage">
+      <span class="reglage-valeur" id="valeur-volume">100%</span>
+    </div>
+
+    <div class="reglage-ligne" id="ligne-panoramique">
+      <span class="reglage-label">↔️ Panoramique</span>
+      <input type="range" id="curseur-panoramique" min="-100" max="100" value="0" class="curseur-reglage">
+      <span class="reglage-valeur" id="valeur-panoramique">centre</span>
+    </div>
+
+    <div id="ligne-fondus">
+      <div class="reglage-ligne">
+        <span class="reglage-label">🔉 Fondu d'entrée</span>
+        <input type="range" id="curseur-fondu-entree" min="0" max="5" step="0.1" value="0" class="curseur-reglage">
+        <span class="reglage-valeur" id="valeur-fondu-entree">aucun</span>
+      </div>
+
+      <div class="reglage-ligne">
+        <span class="reglage-label">🔉 Fondu de sortie</span>
+        <input type="range" id="curseur-fondu-sortie" min="0" max="5" step="0.1" value="0" class="curseur-reglage">
+        <span class="reglage-valeur" id="valeur-fondu-sortie">aucun</span>
+      </div>
+    </div>
+
+    <div class="boutons-decoupage-bas">
+      <button id="btn-fermer-reglages-bas" class="bouton-action bouton-succes">✅ Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODALE CONFIRMATION ===================== -->
+<div id="modale-confirmation" class="modale" hidden>
+  <div class="modale-contenu modale-confirmation-contenu">
+    <p id="texte-confirmation">Es-tu sûr ?</p>
+    <div class="boutons-confirmation">
+      <button id="btn-confirmation-non" class="bouton-secondaire-texte">Non, annuler</button>
+      <button id="btn-confirmation-oui" class="bouton-action bouton-danger">Oui, je confirme</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== NOTIFICATION TOAST ===================== -->
+<div id="toast" class="toast" hidden></div>
+
+<script src="lib/lame.min.js"></script>
+<script src="js/banque-sons.js"></script>
+<script src="js/stockage.js"></script>
+<script src="js/audio-moteur.js"></script>
+<script src="js/forme-onde.js"></script>
+<script src="js/decoupage.js"></script>
+<script src="js/enregistrement.js"></script>
+<script src="js/export-mp3.js"></script>
+<script src="js/pistes-ui.js"></script>
+<script src="js/app.js"></script>
+<!-- Panneau d'aide latéral -->
+  <div id="panneau-aide" class="panneau-aide" hidden>
+    <div class="panneau-aide-entete">
+      <span>❓ Aide — Podkids</span>
+      <button id="btn-fermer-aide" class="bouton-fermer-panneau" title="Fermer">✕</button>
+    </div>
+    <div class="panneau-aide-corps">
+
+      <div class="aide-section">
+        <div class="aide-section-titre" data-cible="aide-enregistrer">🎤 Enregistrer sa voix <span class="aide-chevron">▸</span></div>
+        <div class="aide-section-contenu" id="aide-enregistrer" hidden>
+          <p>Clique sur <b>🎤 Enregistrer ma voix</b>, puis sur le bouton rouge pour démarrer. Parle clairement, à 20–30 cm du micro. Clique <b>Stop</b> puis <b>Ajouter à la piste</b>.</p>
+          <p class="aide-astuce">💡 Si le micro ne fonctionne pas, vérifie que le navigateur a l'autorisation d'y accéder (icône cadenas dans la barre d'adresse).</p>
+        </div>
+      </div>
+
+      <div class="aide-section">
+        <div class="aide-section-titre" data-cible="aide-pistes">🎚️ Les pistes <span class="aide-chevron">▸</span></div>
+        <div class="aide-section-contenu" id="aide-pistes" hidden>
+          <p>Chaque ligne est une piste : <b>voix 🎤, jingle 🔔, tapis 🌬️, bruitage 🔊</b>. On peut en avoir jusqu'à 6. Clique sur l'icône d'une piste pour changer son type.</p>
+          <p>Les boutons à droite de chaque piste permettent de : rendre la piste muette (🔊), régler son volume et son panoramique (🎚️), la déplacer vers le haut ou le bas (▲ ▼), ou la supprimer (🗑️).</p>
+        </div>
+      </div>
+
+      <div class="aide-section">
+        <div class="aide-section-titre" data-cible="aide-clips">✂️ Découper et déplacer un son <span class="aide-chevron">▸</span></div>
+        <div class="aide-section-contenu" id="aide-clips" hidden>
+          <p>Glisse un clip pour le déplacer, y compris vers une autre piste. Clique sur les trois points <b>⋯</b> à la fin d'un clip pour accéder à ses actions : découper, dupliquer, renommer, régler le volume ou supprimer.</p>
+          <p>Dans le module de découpage, les flèches <b>← →</b> du clavier déplacent le curseur de 50 ms (réglage fin), et <b>Shift + ← →</b> de 500 ms pour te déplacer plus vite. La position exacte dans le podcast (minutes, secondes, millisecondes) s'affiche en permanence.</p>
+          <p class="aide-astuce">💡 Pour couper plusieurs pistes au même endroit (par exemple voix + musique en même temps), positionne le curseur au bon moment puis utilise <b>✂️ Couper toutes les pistes ici</b> dans la barre d'outils.</p>
+        </div>
+      </div>
+
+      <div class="aide-section">
+        <div class="aide-section-titre" data-cible="aide-curseur">📍 Le curseur de lecture <span class="aide-chevron">▸</span></div>
+        <div class="aide-section-contenu" id="aide-curseur" hidden>
+          <p>Le <b>curseur rouge</b> sur les pistes et le <b>curseur bleu</b> sur la barre du bas sont synchronisés : déplacer l'un déplace l'autre. Clique ou glisse sur la <b>règle temporelle</b> (en haut des pistes) ou sur la <b>barre de progression</b> (en bas) pour te positionner où tu veux.</p>
+          <p>Les <b>boutons de la barre de lecture</b>, de gauche à droite :</p>
+          <p>⏮️ <b>Retour au début</b> — remet le curseur à 0:00 et scrolle les pistes au début.<br>
+          ◀ <b>Reculer</b> — recule de 500 ms (Shift+◀ : 5 secondes).<br>
+          ▶️ <b>Lecture / Pause</b> — lance ou met en pause (raccourci : <b>Espace</b>).<br>
+          ▶ <b>Avancer</b> — avance de 500 ms (Shift+▶ : 5 secondes).<br>
+          ⏹️ <b>Stop</b> — arrête la lecture et revient à la position où elle avait été lancée.</p>
+          <p>Les flèches <b>← →</b> du clavier déplacent aussi le curseur (500 ms, ou 5 s avec Shift), sauf quand le module de découpage est ouvert.</p>
+          <p class="aide-astuce">💡 Le curseur s'aimante automatiquement aux débuts et fins de clips pour un positionnement précis. Pendant la lecture, l'affichage défile automatiquement pour garder le curseur visible.</p>
+        </div>
+      </div>
+
+      <div class="aide-section">
+        <div class="aide-section-titre" data-cible="aide-sons">🎵 Bibliothèque de sons <span class="aide-chevron">▸</span></div>
+        <div class="aide-section-contenu" id="aide-sons" hidden>
+          <p>Clique sur <b>🎵 Bibliothèque de sons</b> pour voir les sons fournis, classés en jingles, tapis et bruitages. Clique sur le bouton <b>▶</b> à côté d'un son pour l'écouter avant de l'utiliser.</p>
+          <p><b>Glisse</b> un son sur une piste, ou clique sur son nom pour l'ajouter (un menu te demandera sur quelle piste, si plusieurs existent).</p>
+          <p>Tu peux aussi <b>importer tes propres sons</b> (MP3 ou WAV) avec le bouton ➕ en bas de la bibliothèque. Les sons importés peuvent être supprimés (🗑️), mais pas les sons fournis par défaut.</p>
+        </div>
+      </div>
+
+      <div class="aide-section">
+        <div class="aide-section-titre" data-cible="aide-sauvegarde">💾 Sauvegarde et export <span class="aide-chevron">▸</span></div>
+        <div class="aide-section-contenu" id="aide-sauvegarde" hidden>
+          <p>Le projet se sauvegarde <b>automatiquement</b> sur cet ordinateur, quelle que soit sa taille. Pour le transférer vers un autre ordinateur, clique sur <b>💾 Sauvegarder</b> pour télécharger un fichier <code>.podcast</code>, puis utilise <b>Reprendre un podcast (fichier)</b> sur l'autre machine.</p>
+          <p>Pour l'export final en <b>MP3</b> : bouton <b>⬇️ Exporter en mp3</b>. L'opération peut prendre quelques secondes selon la longueur du podcast — ne ferme pas l'onglet pendant l'export.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
