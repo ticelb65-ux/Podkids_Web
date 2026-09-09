@@ -2,9 +2,21 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Podkids - Studio audio pour l'école</title>
 <link rel="stylesheet" href="css/style.css">
+
+<!-- ===================== PWA : installation iOS / Android ===================== -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#E0A23C">
+
+<!-- Android / Chrome utilise surtout le manifest.json ci-dessus.
+     Les balises suivantes sont specifiquement pour Safari iOS, qui ne
+     lit pas toutes les infos du manifest de la meme facon. -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Podkids">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
 
@@ -264,6 +276,22 @@
 <script src="js/export-mp3.js"></script>
 <script src="js/pistes-ui.js"></script>
 <script src="js/app.js"></script>
+
+<!-- Enregistrement du service worker : rend l'appli installable et
+     utilisable hors-ligne sur iOS/Android. Si le fichier tourne en
+     local via pywebview (app de bureau), les Service Workers ne sont
+     pas forcement supportes selon la version : le "if" evite une
+     erreur bloquante dans ce cas, l'appli de bureau continue de
+     fonctionner normalement sans PWA. -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js').catch((erreur) => {
+        console.warn('Enregistrement du service worker impossible :', erreur);
+      });
+    });
+  }
+</script>
 <!-- Panneau d'aide latéral -->
   <div id="panneau-aide" class="panneau-aide" hidden>
     <div class="panneau-aide-entete">
