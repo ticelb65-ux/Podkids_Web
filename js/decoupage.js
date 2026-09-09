@@ -28,6 +28,7 @@ const Decoupage = (() => {
   const poigneeFin = document.getElementById('poignee-fin');
   const curseurLecture = document.getElementById('curseur-lecture-decoupage');
   const btnJouer = document.getElementById('btn-jouer-decoupage');
+  const btnPause = document.getElementById('btn-pause-decoupage');
   const btnCouperIci = document.getElementById('btn-couper-ici');
   const btnAnnuler = document.getElementById('btn-annuler-decoupage');
   const btnValider = document.getElementById('btn-valider-decoupage');
@@ -145,6 +146,12 @@ const Decoupage = (() => {
     }
   }
 
+  // Hisses au niveau du module (plutot que locales a jouerPreview) pour
+  // que pauserLecture() puisse recalculer la position de lecture actuelle
+  // a tout moment, independamment de la boucle d'animation.
+  let pointDeDepartActuel = 0;
+  let tempsDebutLectureActuel = 0;
+
   function jouerPreview() {
     // On memorise la position d'edition AVANT tout arret/relance, puis on
     // la refixe juste apres arreterLecturePreview() (qui peut l'avoir
@@ -169,6 +176,8 @@ const Decoupage = (() => {
     btnJouer.textContent = '⏹️ Arrêter';
 
     const tempsDebutLecture = ctx.currentTime;
+    pointDeDepartActuel = pointDeDepart;
+    tempsDebutLectureActuel = tempsDebutLecture;
     function animer() {
       const ecoule = ctx.currentTime - tempsDebutLecture;
       const positionActuelle = pointDeDepart + ecoule;
@@ -192,6 +201,42 @@ const Decoupage = (() => {
     animationEnCours = requestAnimationFrame(animer);
 
     source.onended = () => { sourceLectureEnCours = null; };
+  }
+
+  /**
+   * Met en pause la lecture EN GARDANT le curseur exactement a l'endroit
+   * ou la lecture en est, contrairement au bouton Ecouter/Arreter qui
+   * restaure toujours la position d'avant l'ecoute. Utile pour ecouter
+   * un moment, mettre en pause pile a l'endroit voulu, puis affiner au
+   * clavier ou marquer la coupure ici sans avoir a tout re-ecouter.
+   */
+  function pauserLecture() {
+    if (!sourceLectureEnCours) return; // rien n'est en cours de lecture
+
+    const ctx = AudioMoteur.obtenirContexte();
+    const ecoule = ctx.currentTime - tempsDebutLectureActuel;
+    const positionAuMomentDeLaPause = Math.max(
+      debutRognage,
+      Math.min(pointDeDepartActuel + ecoule, finRognage)
+    );
+
+    try { sourceLectureEnCours.stop(); } catch (e) { /* deja arretee */ }
+    sourceLectureEnCours = null;
+    if (animationEnCours) {
+      cancelAnimationFrame(animationEnCours);
+      animationEnCours = null;
+    }
+    btnJouer.textContent = '▶️ Écouter';
+
+    // A la difference d'arreterLecturePreview(), on n'annule PAS
+    // positionCurseurAvantEcoute vers l'ancienne position : on la remplace
+    // par la position de pause, qui devient la nouvelle position d'edition.
+    positionCurseurAvantEcoute = null;
+    positionCurseurLecture = positionAuMomentDeLaPause;
+    curseurLecture.style.left = tempsVersPixels(positionAuMomentDeLaPause) + 'px';
+    curseurLecture.style.background = 'var(--texte-principal)';
+    curseurLecture.style.width = '2px';
+    rafraichirAffichagePosition();
   }
 
   /** Bascule entre demarrer et arreter la lecture (utilise par le bouton Ecouter). */
@@ -310,6 +355,7 @@ const Decoupage = (() => {
   conteneurOnde.addEventListener('click', gererClicSurOnde);
 
   btnJouer.addEventListener('click', basculerLecturePreview);
+  if (btnPause) btnPause.addEventListener('click', pauserLecture);
   btnCouperIci.addEventListener('click', gererMarquerCoupureIci);
 
   function mettreAJourTexteValider() {

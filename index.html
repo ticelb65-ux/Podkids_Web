@@ -171,7 +171,7 @@
   <div class="modale-contenu modale-decoupage-contenu">
     <button class="modale-fermer" id="btn-fermer-decoupage">✖️</button>
     <h2>✂️ Découper le son</h2>
-    <p class="aide-decoupage">Clique sur le son pour placer le curseur, puis écoute à partir de cet endroit. Quand tu as trouvé le bon moment, clique sur "Marquer la coupure ici". Tu peux aussi faire glisser les poignées vertes et rouges pour enlever le début ou la fin.</p>
+    <p class="aide-decoupage">Clique sur le son pour placer le curseur, puis écoute à partir de cet endroit (les flèches <b class="aide-desktop-uniquement">← →</b> et la touche <b class="aide-desktop-uniquement">Espace</b> du clavier fonctionnent aussi ici, et sont souvent plus précises). Quand tu as trouvé le bon moment, clique sur "Marquer la coupure ici". Tu peux aussi faire glisser les poignées vertes et rouges pour enlever le début ou la fin.</p>
     <div class="editeur-forme-onde-conteneur">
       <canvas id="canvas-forme-onde" class="canvas-forme-onde"></canvas>
       <div class="poignee poignee-debut" id="poignee-debut" title="Glisse pour enlever le début"></div>
@@ -184,7 +184,7 @@
     </div>
     <div class="boutons-decoupage">
       <button id="btn-jouer-decoupage" class="bouton-action">▶️ Écouter</button>
-      <button id="btn-stopper-decoupage" class="bouton-action" disabled>⏹️ Stop</button>
+      <button id="btn-pause-decoupage" class="bouton-action" title="Mettre en pause sans revenir en arrière">⏸️ Pause</button>
       <button id="btn-couper-ici" class="bouton-action">📍 Marquer la coupure ici</button>
     </div>
     <div class="boutons-decoupage-bas">
@@ -319,23 +319,32 @@
       <div class="aide-section">
         <div class="aide-section-titre" data-cible="aide-clips">✂️ Découper et déplacer un son <span class="aide-chevron">▸</span></div>
         <div class="aide-section-contenu" id="aide-clips" hidden>
-          <p>Glisse un clip pour le déplacer, y compris vers une autre piste. Clique sur les trois points <b>⋯</b> à la fin d'un clip pour accéder à ses actions : découper, dupliquer, renommer, régler le volume ou supprimer.</p>
-          <p>Dans le module de découpage, les flèches <b>← →</b> du clavier déplacent le curseur de 50 ms (réglage fin), et <b>Shift + ← →</b> de 500 ms pour te déplacer plus vite. La position exacte dans le podcast (minutes, secondes, millisecondes) s'affiche en permanence.</p>
+          <p>Glisse un clip pour le déplacer, y compris vers une autre piste. Clique sur les trois points <b>⋯</b> à la fin d'un clip pour accéder à ses actions : découper, dupliquer, renommer, régler le volume et les fondus, ou supprimer.</p>
+          <p class="aide-desktop-uniquement">Dans le module de découpage, les flèches <b>← →</b> du clavier déplacent le curseur de 50 ms (réglage fin), et <b>Shift + ← →</b> de 500 ms pour te déplacer plus vite. La touche <b>Espace</b> lance ou met en pause l'écoute, comme ailleurs dans l'application.</p>
+          <p>Ce module affiche la position exacte au millisecondes près (minutes, secondes, millisecondes) — c'est le seul endroit de l'application où cette précision est visible ; ailleurs, seules les minutes et les secondes sont affichées.</p>
           <p class="aide-astuce">💡 Pour couper plusieurs pistes au même endroit (par exemple voix + musique en même temps), positionne le curseur au bon moment puis utilise <b>✂️ Couper toutes les pistes ici</b> dans la barre d'outils.</p>
+        </div>
+      </div>
+
+      <div class="aide-section">
+        <div class="aide-section-titre" data-cible="aide-fondus">🔉 Fondus d'entrée et de sortie <span class="aide-chevron">▸</span></div>
+        <div class="aide-section-contenu" id="aide-fondus" hidden>
+          <p>Pour qu'un son commence ou se termine en douceur plutôt que brutalement, ouvre les <b>réglages du clip</b> (menu <b>⋯</b> sur le clip, puis <b>régler le volume</b>) : deux curseurs supplémentaires permettent de régler la durée du fondu d'entrée et celle du fondu de sortie, indépendamment l'un de l'autre.</p>
+          <p class="aide-astuce">💡 Un fondu réglé sur 0 signifie "aucun fondu". Le réglage prend effet à la prochaine écoute du clip.</p>
         </div>
       </div>
 
       <div class="aide-section">
         <div class="aide-section-titre" data-cible="aide-curseur">📍 Le curseur de lecture <span class="aide-chevron">▸</span></div>
         <div class="aide-section-contenu" id="aide-curseur" hidden>
-          <p>Le <b>curseur rouge</b> sur les pistes et le <b>curseur bleu</b> sur la barre du bas sont synchronisés : déplacer l'un déplace l'autre. Clique ou glisse sur la <b>règle temporelle</b> (en haut des pistes) ou sur la <b>barre de progression</b> (en bas) pour te positionner où tu veux.</p>
+          <p>Le <b>curseur rouge</b> sur les pistes et le <b>curseur bleu</b> sur la barre du bas sont synchronisés : déplacer l'un déplace l'autre. Touche ou glisse sur la <b>règle temporelle</b> (en haut des pistes) ou sur la <b>barre de progression</b> (en bas) pour te positionner où tu veux.</p>
           <p>Les <b>boutons de la barre de lecture</b>, de gauche à droite :</p>
           <p>⏮️ <b>Retour au début</b> — remet le curseur à 0:00 et scrolle les pistes au début.<br>
-          ◀ <b>Reculer</b> — recule de 500 ms (Shift+◀ : 5 secondes).<br>
-          ▶️ <b>Lecture / Pause</b> — lance ou met en pause (raccourci : <b>Espace</b>).<br>
-          ▶ <b>Avancer</b> — avance de 500 ms (Shift+▶ : 5 secondes).<br>
+          ◀ <b>Reculer</b> — recule de 500 ms<span class="aide-desktop-uniquement"> (Shift+◀ : 5 secondes)</span>.<br>
+          ▶️ <b>Lecture / Pause</b> — lance ou met en pause<span class="aide-desktop-uniquement"> (raccourci : <b>Espace</b>)</span>.<br>
+          ▶ <b>Avancer</b> — avance de 500 ms<span class="aide-desktop-uniquement"> (Shift+▶ : 5 secondes)</span>.<br>
           ⏹️ <b>Stop</b> — arrête la lecture et revient à la position où elle avait été lancée.</p>
-          <p>Les flèches <b>← →</b> du clavier déplacent aussi le curseur (500 ms, ou 5 s avec Shift), sauf quand le module de découpage est ouvert.</p>
+          <p class="aide-desktop-uniquement">Les flèches <b>← →</b> du clavier déplacent aussi le curseur (500 ms, ou 5 s avec Shift), sauf quand le module de découpage est ouvert.</p>
           <p class="aide-astuce">💡 Le curseur s'aimante automatiquement aux débuts et fins de clips pour un positionnement précis. Pendant la lecture, l'affichage défile automatiquement pour garder le curseur visible.</p>
         </div>
       </div>
@@ -345,7 +354,7 @@
         <div class="aide-section-contenu" id="aide-sons" hidden>
           <p>Clique sur <b>🎵 Bibliothèque de sons</b> pour voir les sons fournis, classés en jingles, tapis et bruitages. Clique sur le bouton <b>▶</b> à côté d'un son pour l'écouter avant de l'utiliser.</p>
           <p><b>Glisse</b> un son sur une piste, ou clique sur son nom pour l'ajouter (un menu te demandera sur quelle piste, si plusieurs existent).</p>
-          <p>Tu peux aussi <b>importer tes propres sons</b> (MP3 ou WAV) avec le bouton ➕ en bas de la bibliothèque. Les sons importés peuvent être supprimés (🗑️), mais pas les sons fournis par défaut.</p>
+          <p>Tu peux aussi <b>importer tes propres sons</b> avec le bouton ➕ en bas de la bibliothèque. Privilégie le <b>mp3</b> ou le <b>wav</b>, les deux formats qui fonctionnent de façon fiable sur tous les appareils ; d'autres formats comme le m4a passent parfois, mais pas toujours selon l'appareil, et le <b>wma</b> ne fonctionne jamais. Les sons importés peuvent être supprimés (🗑️), mais pas les sons fournis par défaut.</p>
         </div>
       </div>
 

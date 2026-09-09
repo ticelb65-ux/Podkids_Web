@@ -997,7 +997,7 @@ input {
 }
 .poignee::before {
   content: '';
-  width: 6px;
+  width: 4px;
   height: 100%;
   border-radius: 3px;
 }
@@ -1148,6 +1148,12 @@ input {
    l'interface, con"us a l'origine pour une precision de souris. */
 
 @media (pointer: coarse) {
+  /* Contenu d'aide propre au clavier (raccourcis, fleches) : sans
+     interet sur un appareil tactile qui n'a pas de clavier physique. */
+  .aide-desktop-uniquement {
+    display: none;
+  }
+
   .piste-bouton-controle { width: 32px; height: 32px; font-size: 15px; }
   .clip-bouton-action { width: 30px; height: 30px; font-size: 15px; }
   .bouton-icone-petit { width: 44px; height: 44px; }
